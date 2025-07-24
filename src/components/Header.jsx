@@ -1,10 +1,31 @@
 import React, { useState } from "react";
-import { Megaphone, Smartphone, LogIn, UserPlus } from "lucide-react";
-import LoginModal from "./LoginModal";
+import { Megaphone, Smartphone, LogIn, UserPlus, Menu, X } from "lucide-react";
+import LoginModal from "./LoginModal"; // Giả sử bạn có component này
+
+// Một component con để làm cho code നാവിഗേഷൻ dễ đọc hơn
+const NavLink = ({ children, href, isActive, onClick }) => (
+  <a
+    href={href}
+    onClick={onClick}
+    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-300 ${
+      isActive ? "text-blue-600" : "text-gray-500 hover:text-blue-600"
+    }`}
+  >
+    {children}
+    {/* Dấu gạch chân cho item active */}
+    <span
+      className={`absolute bottom-0 left-1/2 h-0.5 w-full -translate-x-1/2 transform bg-blue-600 transition-all duration-300 ${
+        isActive ? "scale-x-100" : "scale-x-0"
+      }`}
+    />
+  </a>
+);
 
 function Header() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("Nhà trọ, phòng trọ");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const navItems = [
     "Nhà trọ, phòng trọ",
     "Nhà nguyên căn",
@@ -13,80 +34,138 @@ function Header() {
     "Blog",
   ];
 
+  const handleNavClick = (item) => {
+    setActiveNav(item);
+    setIsMobileMenuOpen(false); // Đóng menu mobile khi chọn 1 item
+  };
+
   return (
-    <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <a
-            href="/"
-            className="flex items-center space-x-3 group hover:scale-105 transition-transform"
-          >
-            <img
-              src="/Logo.png"
-              alt="logo"
-              className="w-14 h-14 object-contain rounded-xl shadow-lg group-hover:shadow-blue-200 transition-shadow"
-            />
-            <span className="text-3xl font-extrabold text-blue-700 tracking-wide drop-shadow group-hover:text-[#2F54EB] transition-colors">
-              TroUni
-            </span>
-          </a>
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 shadow-sm backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
+            {/* Logo */}
+            <a href="/" className="flex flex-shrink-0 items-center space-x-3">
+              <img
+                src="/Logo.png" // Thay bằng logo của bạn
+                alt="TroUni Logo"
+                className="h-14 w-14 rounded-xl object-contain"
+              />
+              <span className="text-3xl font-bold text-blue-700 tracking-tight">
+                TroUni
+              </span>
+            </a>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 text-sm">
-            {navItems.map((item) => (
+            {/* Navigation cho Desktop */}
+            <nav className="hidden items-center space-x-2 md:flex">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item}
+                  href="#"
+                  isActive={activeNav === item}
+                  onClick={() => handleNavClick(item)}
+                >
+                  {item}
+                </NavLink>
+              ))}
+            </nav>
+
+            {/* Actions cho Desktop */}
+            <div className="hidden items-center space-x-4 md:flex">
               <a
-                key={item}
-                href="#"
-                onClick={() => setActiveNav(item)}
-                className={`${
-                  activeNav === item
-                    ? "bg-[#2F54EB] text-white px-4 py-2 rounded-lg font-medium"
-                    : "text-gray-700 hover:text-blue-600 transition-colors"
-                }`}
+                onClick={() => setIsLoginOpen(true)}
+                className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors"
               >
-                {item}
+                Đăng nhập
               </a>
-            ))}
-            <a
-              href="#"
-              className="flex items-center px-3 py-1.5 text-green-600 font-medium border border-green-100 rounded-lg bg-green-50 hover:bg-green-100 transition"
-            >
-              <Smartphone className="w-4 h-4 mr-1" />
-              Ứng dụng
-            </a>
-          </nav>
+              <a
+                onClick={() => setIsLoginOpen(true)}
+                className="cursor-pointer rounded-lg bg-blue-100/50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+              >
+                Đăng ký
+              </a>
+              <a
+                href="#"
+                className="flex items-center space-x-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-blue-700 transition-all hover:-translate-y-0.5"
+              >
+                <Megaphone className="h-4 w-4" />
+                <span>Đăng tin</span>
+              </a>
+            </div>
 
-          {/* Actions */}
-          <div className="hidden md:flex items-center space-x-4 text-sm">
-            <a
-              onClick={() => setIsLoginOpen(true)}
-              className="cursor-pointer flex items-center text-blue-700 hover:underline"
-            >
-              <LogIn className="w-4 h-4 mr-1" />
-              Đăng nhập
-            </a>
-            <span className="text-gray-300">|</span>
-            <a
-              onClick={() => setIsLoginOpen(true)}
-              className="cursor-pointer flex items-center text-blue-700 hover:underline"
-            >
-              <UserPlus className="w-4 h-4 mr-1" />
-              Đăng ký
-            </a>
-            <a
-              href="#"
-              className="flex items-center bg-[#2F54EB] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#1D39C4] transition"
-            >
-              <Megaphone className="w-4 h-4 mr-1" />
-              Quảng cáo Trọ
-            </a>
+            {/* Nút Hamburger cho Mobile */}
+            <div className="flex items-center md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="block h-6 w-6" aria-hidden="true" />
+                ) : (
+                  <Menu className="block h-6 w-6" aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* Menu cho Mobile */}
+        {isMobileMenuOpen && (
+          <div className="border-t border-gray-200 md:hidden">
+            <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  onClick={() => handleNavClick(item)}
+                  className={`block rounded-md px-3 py-2 text-base font-medium ${
+                    activeNav === item
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-800"
+                  }`}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+            <div className="border-t border-gray-200 px-4 pt-4 pb-3">
+              <div className="space-y-3">
+                <a
+                  onClick={() => {
+                    setIsLoginOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg px-3 py-2 font-medium text-gray-600 hover:bg-gray-100"
+                >
+                  <LogIn className="h-5 w-5 text-gray-500" />
+                  <span>Đăng nhập</span>
+                </a>
+                <a
+                  onClick={() => {
+                    setIsLoginOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg px-3 py-2 font-medium text-gray-600 hover:bg-gray-100"
+                >
+                  <UserPlus className="h-5 w-5 text-gray-500" />
+                  <span>Đăng ký</span>
+                </a>
+                <a
+                  href="#"
+                  className="mt-2 flex items-center justify-center space-x-2 rounded-lg bg-blue-600 px-4 py-3 text-base font-medium text-white shadow-md hover:bg-blue-700 transition"
+                >
+                  <Megaphone className="h-5 w-5" />
+                  <span>Đăng tin miễn phí</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
       {/* Login Modal */}
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-    </header>
+    </>
   );
 }
 
