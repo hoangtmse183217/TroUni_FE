@@ -1,90 +1,96 @@
-import React, { useState } from "react";
-import { X } from "lucide-react";
+import React from "react";
+import { X, Mail } from "lucide-react";
+
+// Component con cho các nút đăng nhập mạng xã hội để code gọn hơn
+// Cải tiến lớn: Thêm văn bản để nút rõ ràng hơn cho người dùng
+const SocialButton = ({ icon, label }) => (
+  <button className="flex w-full items-center justify-center space-x-3 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-700 transition-all duration-300 hover:bg-slate-100 hover:shadow-sm">
+    <img src={icon} alt={`${label} logo`} className="h-5 w-5" />
+    <span>Tiếp tục với {label}</span>
+  </button>
+);
 
 const LoginModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop with blur */}
+    // Backdrop với hiệu ứng mờ dần khi xuất hiện
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 transition-opacity duration-300"
+      onClick={onClose}
+    >
+      {/* Nội dung Modal - thêm animation trượt lên và mờ dần vào */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Modal Content */}
-      <div className="bg-white rounded-2xl w-full max-w-md p-8 relative shadow-2xl transform transition-all scale-100 z-10">
-        {/* Close Button */}
+        className="relative w-full max-w-md transform rounded-2xl bg-white p-8 shadow-2xl transition-transform duration-500 ease-out animate-slide-up"
+        onClick={(e) => e.stopPropagation()} // Ngăn việc nhấn vào modal bị đóng
+      >
+        {/* Nút đóng được thiết kế lại */}
         <button
-          className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors duration-200"
+          className="absolute top-4 right-4 rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
           onClick={onClose}
         >
-          <X size={20} className="text-gray-500 hover:text-gray-700" />
+          <X size={24} />
         </button>
 
-        {/* Header */}
-        <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-          Đăng nhập hoặc tạo tài khoản
-        </h2>
-        <p className="text-sm text-gray-600 mb-6">
-          Bạn có thể đăng nhập tài khoản TroUni của mình để truy cập các dịch vụ
-          của chúng tôi.
-        </p>
+        {/* Header - tinh chỉnh font và màu sắc */}
+        <div className="mb-6 text-center">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            Chào mừng bạn
+          </h2>
+          <p className="mt-2 text-sm text-slate-500">
+            Đăng nhập hoặc đăng ký để bắt đầu hành trình của bạn.
+          </p>
+        </div>
 
-        {/* Email Input */}
-        <label className="block mb-2 font-medium text-sm text-gray-700">
-          Địa chỉ email
-        </label>
-        <input
-          type="email"
-          placeholder="Nhập địa chỉ email của bạn"
-          className="w-full border border-gray-300 px-4 py-2.5 rounded-lg mb-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-        />
+        <form className="space-y-5">
+          {/* Input với Icon - trông hiện đại và trực quan hơn */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-slate-700">
+              Địa chỉ email
+            </label>
+            <div className="relative">
+              <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+              <input
+                type="email"
+                placeholder="Nhập địa chỉ email của bạn"
+                className="w-full rounded-lg border border-slate-300 bg-slate-50 py-3 pl-11 pr-4 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+          </div>
 
-        {/* Continue Button */}
-        <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2.5 rounded-lg font-medium hover:from-blue-700 hover:to-blue-800 transform hover:-translate-y-0.5 transition-all duration-200 shadow-md hover:shadow-lg">
-          Tiếp tục với email
-        </button>
+          {/* Nút chính với hiệu ứng được tăng cường */}
+          <button className="flex w-full transform items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 py-3 font-semibold text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg active:scale-95">
+            Tiếp tục với Email
+          </button>
+        </form>
 
-        {/* Divider */}
+        {/* Dải phân cách được làm tinh tế hơn */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
+            <div className="w-full border-t border-slate-200" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 text-gray-500 bg-white">
-              hoặc sử dụng một trong các lựa chọn này
-            </span>
+            <span className="bg-white px-3 text-slate-400">hoặc</span>
           </div>
         </div>
 
-        {/* Social Buttons */}
-        <div className="flex justify-center space-x-4">
-          <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:shadow-md">
-            <img src="/google.webp" alt="Google" className="w-6 h-6" />
-          </button>
-          <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:shadow-md">
-            <img src="/facebook.webp" alt="Facebook" className="w-6 h-6" />
-          </button>
+        {/* Nút đăng nhập mạng xã hội được thiết kế lại, rõ ràng và thân thiện hơn */}
+        <div className="space-y-3">
+          <SocialButton icon="/google.webp" label="Google" />
+          <SocialButton icon="/facebook.webp" label="Facebook" />
         </div>
 
-        {/* Terms */}
-        <p className="text-xs text-gray-500 mt-8 text-center leading-relaxed">
-          Bằng việc đăng nhập hoặc tạo tài khoản, bạn đồng ý với các{" "}
-          <a
-            href="#"
-            className="text-blue-600 hover:text-blue-700 hover:underline font-medium"
-          >
-            Điều khoản và Điều kiện
+        {/* Điều khoản */}
+        <p className="mt-8 text-center text-xs text-slate-500 leading-relaxed">
+          Bằng việc tiếp tục, bạn đồng ý với{" "}
+          <a href="#" className="font-medium text-blue-600 hover:underline">
+            Điều khoản Dịch vụ
           </a>{" "}
-          cùng như{" "}
-          <a
-            href="#"
-            className="text-blue-600 hover:text-blue-700 hover:underline font-medium"
-          >
+          và{" "}
+          <a href="#" className="font-medium text-blue-600 hover:underline">
             Chính sách Bảo mật
-          </a>
-          .
+          </a>{" "}
+          của TroUni.
         </p>
       </div>
     </div>

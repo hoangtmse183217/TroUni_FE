@@ -39,7 +39,7 @@
 }
 
 .animate-slide-up {
-  animation: slide-up 0.8s ease-out;
+  animation: slide-up 0.8s ease-out both;
 }
 
 .animate-float {
