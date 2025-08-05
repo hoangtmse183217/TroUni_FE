@@ -79,10 +79,10 @@ export default function Footer() {
           <div className="md:col-span-6 lg:col-span-2">
             <h3 className="font-semibold text-slate-800">Về chúng tôi</h3>
             <ul className="mt-4 space-y-3">
-              <FooterLink href="#">Dành cho chủ trọ</FooterLink>
-              <FooterLink href="#">Hướng dẫn</FooterLink>
+              <FooterLink href="/404">Dành cho chủ trọ</FooterLink>
+              <FooterLink href="/404">Hướng dẫn</FooterLink>
               <FooterLink href="/contact">Liên hệ</FooterLink>
-              <FooterLink href="#">Blog</FooterLink>
+              <FooterLink href="/404">Blog</FooterLink>
             </ul>
           </div>
 
