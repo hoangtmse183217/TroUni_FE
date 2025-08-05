@@ -100,7 +100,7 @@ function ContactPage() {
           {/* Hình ảnh */}
           <div className="group relative h-96 md:h-full w-full overflow-hidden rounded-2xl shadow-lg">
             <img
-              src="/banner-contact.png"
+              src="/banner-contact.webp"
               alt="Liên hệ TroUni"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
             />
